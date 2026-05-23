@@ -1,25 +1,26 @@
 .PHONY: minimal
 minimal: venv
 
-venv: setup.py requirements-dev.txt Makefile tox.ini
-	tox devenv $@
+.PHONY: venv
+venv:
+	uv sync
 
 .PHONY: test
 test: venv
-	venv/bin/coverage erase
-	venv/bin/coverage run -m pytest -v tests
-	venv/bin/coverage report --show-missing --fail-under 100
-	venv/bin/pre-commit install -f --install-hooks
-	venv/bin/pre-commit run --all-files
+	uv run coverage erase
+	uv run coverage run -m pytest -v tests
+	uv run coverage report --show-missing --fail-under 100
+	uv run pre-commit install -f --install-hooks
+	uv run pre-commit run --all-files
 
 .PHONY: release
-release: venv
-	venv/bin/python setup.py sdist bdist_wheel
-	venv/bin/twine upload --skip-existing dist/*
+release:
+	uv build
+	uvx twine upload --skip-existing dist/*
 
 .PHONY: test-repo
 test-repo: venv
-	venv/bin/python -m dumb_pypi.main \
+	uv run python -m dumb_pypi.main \
 		--package-list-json testing/package-list-json \
 		--packages-url http://just.an.example/ \
 		--output-dir test-repo \

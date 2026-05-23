@@ -1,8 +1,0 @@
-covdefaults
-coverage
-ephemeral-port-reserve
-pre-commit>=1.0
-pytest
-requests
-setuptools
-twine
