@@ -1,7 +1,7 @@
 *.egg-info
 *.py[co]
 /.coverage
-/.tox
+/.venv
 /build
 /dist
 /gh-pages

@@ -4,16 +4,22 @@ on:
     tags: '*'
   pull_request:
 jobs:
-  tox:
+  test:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        python: ['3.10', '3.11', '3.12']
+        python: ['3.12', '3.13']
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
         with:
           python-version: ${{ matrix.python }}
-      - run: pip install tox
-      - run: tox -e py
+      - run: uv run coverage run -m pytest -v tests
+      - run: uv run coverage report --show-missing --fail-under 100
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - uses: pre-commit/action@v3.0.1

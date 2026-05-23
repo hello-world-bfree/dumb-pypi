@@ -1,0 +1,71 @@
+[build-system]
+requires = ["uv_build>=0.10,<0.11"]
+build-backend = "uv_build"
+
+[project]
+name = "dumb_pypi"
+version = "1.15.0"
+description = "Simple read-only PyPI static index server generator"
+readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+authors = [{ name = "Chris Kuehl", email = "ckuehl@ckuehl.me" }]
+requires-python = ">=3.12"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: Implementation :: CPython",
+]
+dependencies = [
+    "jinja2",
+    "packaging>=20.9",
+]
+
+[project.urls]
+Homepage = "https://github.com/chriskuehl/dumb-pypi"
+
+[project.scripts]
+dumb-pypi = "dumb_pypi.main:main"
+
+[dependency-groups]
+dev = [
+    "covdefaults",
+    "coverage",
+    "ephemeral-port-reserve",
+    "pre-commit>=1.0",
+    "pytest",
+    "requests",
+    "setuptools",
+    "virtualenv",
+    "wheel",
+]
+
+[tool.uv.build-backend]
+module-root = ""
+module-name = "dumb_pypi"
+source-include = ["tests/**", "testing/**"]
+
+[tool.ruff]
+line-length = 119
+
+[tool.ruff.lint]
+extend-select = ["I", "UP"]
+
+[tool.ruff.lint.isort]
+force-single-line = true
+required-imports = ["from __future__ import annotations"]
+
+[tool.coverage.run]
+plugins = ["covdefaults"]
+
+[tool.mypy]
+check_untyped_defs = true
+disallow_any_generics = true
+disallow_incomplete_defs = true
+disallow_untyped_defs = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+
+[[tool.mypy.overrides]]
+module = ["testing.*", "tests.*"]
+disallow_untyped_defs = false
